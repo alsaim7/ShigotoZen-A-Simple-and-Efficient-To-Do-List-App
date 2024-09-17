@@ -67,7 +67,8 @@ export default function TodoList() {
         <Box sx={{
             display: 'flex',
             justifyContent: 'center',
-
+            paddingTop: '70px',
+            paddingBottom: '180px'
         }}>
             <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
                 {todo.map((l) => (

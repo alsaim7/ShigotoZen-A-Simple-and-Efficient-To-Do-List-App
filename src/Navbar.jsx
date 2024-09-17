@@ -14,8 +14,18 @@ import { useState } from 'react';
 
 export default function Navbar({toDarkMode}) {
     return (
-        <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static">
+        <Box sx={{
+            display: 'flex',
+            width: '100%',
+            justifyContent:'center',
+            position: 'fixed',
+            zIndex: 2000
+        }}>
+            <AppBar position="static"
+            sx={{
+                width: '450px',
+                boxShadow: 'none'
+            }}>
                 <Toolbar sx={{ justifyContent: 'center' }}>
                     <AdbIcon sx={{ display: { xs: 'flex', md: 'flex' }, mr: 2 }} />
                     <Typography
