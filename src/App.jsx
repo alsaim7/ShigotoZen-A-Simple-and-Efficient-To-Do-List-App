@@ -3,6 +3,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import TodoList from './TodoList';
 import TodolistForm from './TodolistForm';
 import Navbar from './Navbar';
+import Watermark from './Watermark';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 import { useState, useEffect } from 'react';
@@ -42,6 +43,7 @@ function App() {
         <Navbar toDarkMode={toDarkMode} />
         <TodoList />
         {/* <TodolistForm /> */}
+        <Watermark />
       </ThemeProvider>
     </>
   )

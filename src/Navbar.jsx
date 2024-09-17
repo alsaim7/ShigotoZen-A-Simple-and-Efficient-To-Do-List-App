@@ -24,7 +24,7 @@ export default function Navbar({toDarkMode}) {
                         component="span"
                         // href="#app-bar-with-responsive-menu"
                         sx={{
-                            mr: 2,
+                            mr: 4,
                             display: { xs: 'flex', md: 'flex' },
                             fontFamily: 'monospace',
                             fontWeight: 700,
