@@ -5,7 +5,7 @@ import List from '@mui/material/List';
 import TodolistForm from "./TodolistForm";
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-
+import Watermark from "./Watermark";
 
 // const initialList = [
 //     { id: uuid(), task: 'do coding practice', completed: false },
@@ -67,14 +67,15 @@ export default function TodoList() {
         <Box sx={{
             display: 'flex',
             justifyContent: 'center',
-            paddingTop: '70px',
-            paddingBottom: '180px'
+            paddingTop: '60px',
+            // paddingBottom: '170px'
         }}>
-            <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+            <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper', paddingBottom: '454px'}}>
                 {todo.map((l) => (
                     <Todolistitem l={l} key={l.id} deleteTask={deleteTask} checkTask={checkTask} />
                 ))}
                 <TodolistForm addTodo={addTodo} />
+                {/* <Watermark/> */}
             </List>
         </Box>
     );

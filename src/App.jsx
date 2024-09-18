@@ -39,10 +39,8 @@ function App() {
     <>
       <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
         <CssBaseline />
-        {/* <h1>hello</h1> */}
         <Navbar toDarkMode={toDarkMode} />
         <TodoList />
-        {/* <TodolistForm /> */}
         <Watermark />
       </ThemeProvider>
     </>

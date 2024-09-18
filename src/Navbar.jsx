@@ -24,7 +24,7 @@ export default function Navbar({toDarkMode}) {
             <AppBar position="static"
             sx={{
                 width: '450px',
-                boxShadow: 'none'
+                // boxShadow: 'none'
             }}>
                 <Toolbar sx={{ justifyContent: 'center' }}>
                     <AdbIcon sx={{ display: { xs: 'flex', md: 'flex' }, mr: 2 }} />
