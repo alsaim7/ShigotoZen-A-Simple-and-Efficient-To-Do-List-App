@@ -70,7 +70,7 @@ export default function TodoList() {
             paddingTop: '60px',
             // paddingBottom: '170px'
         }}>
-            <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper', paddingBottom: '454px'}}>
+            <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper', paddingBottom: '854px'}}>
                 {todo.map((l) => (
                     <Todolistitem l={l} key={l.id} deleteTask={deleteTask} checkTask={checkTask} />
                 ))}
