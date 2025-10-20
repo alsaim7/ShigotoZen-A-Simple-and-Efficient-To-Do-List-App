@@ -2,64 +2,59 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import Avatar from '@mui/material/Avatar';
-import AdbIcon from '@mui/icons-material/Adb';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
-import DarkMode from '@mui/icons-material/DarkMode';
-import { useState } from 'react';
+import logo from '../public/favicon.png'
 
-
-export default function Navbar({toDarkMode}) {
+export default function Navbar({ toDarkMode }) {
     return (
         <Box sx={{
-            display: 'flex',
             width: '100%',
-            justifyContent:'center',
             position: 'fixed',
-            zIndex: 2000
+            top: 0,
+            zIndex: 2000,
+            px: { xs: 1, sm: 2 },
         }}>
-            <AppBar position="static"
-            sx={{
-                width: '450px',
-                // boxShadow: 'none'
-            }}>
-                <Toolbar sx={{ justifyContent: 'center' }}>
-                    <AdbIcon sx={{ display: { xs: 'flex', md: 'flex' }, mr: 2 }} />
-                    <Typography
-                        variant="h6"
-                        noWrap
-                        component="span"
-                        // href="#app-bar-with-responsive-menu"
+            <AppBar
+                position="static"
+                sx={{
+                    maxWidth: '100%',
+                    borderRadius: '0 0 12px 12px',
+                    boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
+                    backgroundImage: 'linear-gradient(to bottom, rgba(255,255,255,0.05), transparent)',
+                }}
+            >
+                <Toolbar sx={{
+                    justifyContent: 'space-between',
+                    py: 1,
+                    px: { xs: 2, sm: 3 },
+                }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                        <img src={logo} alt="ShigotoZen" style={{ height: '32px' }} />
+                        <Typography
+                            variant="h6"
+                            noWrap
+                            sx={{
+                                fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
+                                fontWeight: 700,
+                                letterSpacing: '.1rem',
+                            }}
+                        >
+                            ShigotoZen
+                        </Typography>
+                    </Box>
+                    <IconButton
+                        color="inherit"
+                        onClick={toDarkMode}
                         sx={{
-                            mr: 4,
-                            display: { xs: 'flex', md: 'flex' },
-                            fontFamily: 'monospace',
-                            fontWeight: 700,
-                            letterSpacing: '.3rem',
-                            color: 'inherit',
-                            textDecoration: 'none',
+                            transition: 'all 0.3s ease',
+                            '&:hover': {
+                                transform: 'rotate(180deg)',
+                            },
                         }}
                     >
-                        ShigotoZen
-                    </Typography>
-
-                    <IconButton
-                        size="large"
-                        edge="start"
-                        color="inherit"
-                        aria-label="menu"
-                        sx={{ mr: 1 }}
-                        onClick={toDarkMode}
-                    >
-                        <DarkMode />
+                        <DarkModeIcon />
                     </IconButton>
-                    {/* <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
-                        ShigotoZen
-                    </Typography> */}
-                    {/* <Button color="inherit">Login</Button> */}
                 </Toolbar>
             </AppBar>
         </Box>

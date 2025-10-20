@@ -1,81 +1,62 @@
-import { useState, useEffect } from "react"
-import { v4 as uuid } from 'uuid'
+import { useState, useEffect } from "react";
+import { v4 as uuid } from 'uuid';
 import Todolistitem from "./Todolistitem";
-import List from '@mui/material/List';
 import TodolistForm from "./TodolistForm";
+import List from '@mui/material/List';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Watermark from "./Watermark";
-
-// const initialList = [
-//     { id: uuid(), task: 'do coding practice', completed: false },
-//     { id: uuid(), task: 'do coding practice', completed: false },
-//     { id: uuid(), task: 'do coding practice', completed: true },
-//     { id: uuid(), task: 'do coding practice', completed: false }
-// ]
 
 const initialData = () => {
-    const data = JSON.parse(localStorage.getItem('todo'))
-    if (!data) {
-        return []
-    } else {
-        return data
-    }
-}
-
+    const data = JSON.parse(localStorage.getItem('todo'));
+    return data || [];
+};
 
 export default function TodoList() {
-    const [todo, setTodo] = useState(initialData)
-
-
+    const [todo, setTodo] = useState(initialData);
 
     useEffect(() => {
-        localStorage.setItem('todo', JSON.stringify(todo))
-    }, [todo])
-
+        localStorage.setItem('todo', JSON.stringify(todo));
+    }, [todo]);
 
     const addTodo = (text) => {
-        setTodo((oldTodo) => {
-            return [...oldTodo, { id: uuid(), task: text, completed: false }]
-        })
-    }
+        setTodo((oldTodo) => [
+            ...oldTodo,
+            { id: uuid(), task: text, completed: false }
+        ]);
+    };
 
     const deleteTask = (id) => {
-        // console.log(id)
-        setTodo((oldTodo) => {
-            return oldTodo.filter((x) => {
-                return x.id !== id
-            })
-        })
-    }
+        setTodo((oldTodo) => oldTodo.filter((x) => x.id !== id));
+    };
 
     const checkTask = (id) => {
-        // console.log(id)
-        setTodo((oldTodo) => {
-            return oldTodo.map((l) => {
-                if (id === l.id) {
-                    return { ...l, completed: !l.completed }
-                }
-                else {
-                    return l
-                }
-            })
-        })
+        setTodo((oldTodo) => oldTodo.map((l) =>
+            l.id === id ? { ...l, completed: !l.completed } : l
+        ));
+    };
 
-    }
     return (
         <Box sx={{
             display: 'flex',
             justifyContent: 'center',
-            paddingTop: '60px',
-            // paddingBottom: '170px'
+            minHeight: 'calc(100vh - 64px)',
+            padding: { xs: '80px 16px 100px', md: '100px 24px 100px' },
         }}>
-            <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper', paddingBottom: '854px'}}>
+            <List sx={{
+                width: '100%',
+                maxWidth: { xs: '100%', sm: 480, md: 600 },
+                bgcolor: 'background.paper',
+                borderRadius: '12px',
+                padding: '16px',
+            }}>
                 {todo.map((l) => (
-                    <Todolistitem l={l} key={l.id} deleteTask={deleteTask} checkTask={checkTask} />
+                    <Todolistitem
+                        l={l}
+                        key={l.id}
+                        deleteTask={deleteTask}
+                        checkTask={checkTask}
+                    />
                 ))}
                 <TodolistForm addTodo={addTodo} />
-                {/* <Watermark/> */}
             </List>
         </Box>
     );

@@ -3,60 +3,72 @@ import ListItem from '@mui/material/ListItem';
 import { useState } from 'react';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
-// import AddTaskIcon from '@mui/icons-material/AddTask';
 import AddTaskRoundedIcon from '@mui/icons-material/AddTaskRounded';
-import AddTaskRounded from '@mui/icons-material/AddTaskRounded';
+
 export default function TodolistForm({ addTodo }) {
-    const [text, setText] = useState('')
-    const [error, setError]= useState(false)
+    const [text, setText] = useState('');
+    const [error, setError] = useState(false);
+
     const changeText = (e) => {
-        setText(e.target.value)
-    }
-    const handleSubmit=(e)=>{
-        e.preventDefault()
-        if (text.trim()===''){
-            setError(true)
-        } else {
-            setError(false)
-            addTodo(text)
+        setText(e.target.value);
+        if (error && e.target.value.trim() !== '') {
+            setError(false);
         }
-        setText('')
-    }
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (text.trim() === '') {
+            setError(true);
+        } else {
+            setError(false);
+            addTodo(text);
+            setText('');
+        }
+    };
+
     return (
-        <form onSubmit={handleSubmit}>
-            <ListItem>
+        <ListItem sx={{ padding: '16px 8px' }}>
+            <form onSubmit={handleSubmit} style={{ width: '100%' }}>
                 <TextField
-                    // required
+                    fullWidth
                     error={error}
-                    helperText={error? 'Task cannot be blank :(': null}
-                    id="outlined-basic"
-                    label="Add to ShigotoZen"
+                    helperText={error ? 'Task cannot be blank :(' : null}
+                    label="Add new task"
                     variant="outlined"
                     value={text}
                     onChange={changeText}
+                    sx={{
+                        '& .MuiOutlinedInput-root': {
+                            borderRadius: '8px',
+                            transition: 'all 0.3s ease',
+                            '&:hover': {
+                                boxShadow: '0 0 0 2px rgba(59, 130, 246, 0.1)',
+                            },
+                        },
+                    }}
                     InputProps={{
                         endAdornment: (
                             <InputAdornment position="end">
                                 <IconButton
-                                    aria-label="createTodo"
-                                    // onClick={(e) => {
-                                    //     addTodo(text, e)
-                                    //     setText('')
-                                    // }
-                                    // }
-                                    // onMouseDown={handleMouseDownPassword}
-                                    // onMouseUp={handleMouseUpPassword}
-                                    type='submit'
+                                    type="submit"
                                     edge="end"
+                                    sx={{
+                                        transition: 'all 0.3s ease',
+                                        '&:hover': {
+                                            transform: 'scale(1.1)',
+                                        },
+                                    }}
                                 >
-                                    {/* {showPassword ? <VisibilityOff /> : <Visibility />} */}
-                                    <AddTaskRounded color={error ? 'error' : text === '' ? '' : 'primary'} />
+                                    <AddTaskRoundedIcon
+                                        color={error ? 'error' : text === '' ? 'disabled' : 'primary'}
+                                    />
                                 </IconButton>
                             </InputAdornment>
-                        )
+                        ),
                     }}
                 />
-            </ListItem>
-        </form>
-    )
+            </form>
+        </ListItem>
+    );
 }
