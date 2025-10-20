@@ -23,7 +23,7 @@ export default defineConfig({
           { src: '/favicon-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
         ],
       },
-      devOptions: { enabled: true },
+      devOptions: { enabled: false },
       workbox: {
         globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
         runtimeCaching: [
@@ -45,7 +45,7 @@ export default defineConfig({
       injectRegister: 'auto',
     }),
   ],
-  base: '/', // Use absolute paths for Netlify
+  base: '/',
   build: {
     outDir: 'dist',
   },
