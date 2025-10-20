@@ -6,46 +6,47 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: 'autoUpdate', // Automatically updates the service worker
+      registerType: 'autoUpdate',
       includeAssets: ['favicon.png', 'logo.png', 'favicon-192.png', 'favicon-512.png'],
       manifest: {
         name: 'ShigotoZen',
         short_name: 'ShigotoZen',
         description: 'A minimalist todo app for productivity and focus',
-        theme_color: '#3B82F6', // Matches your app's theme
-        background_color: '#F8FAFC', // Matches light theme background
-        display: 'standalone', // App-like experience
+        theme_color: '#3B82F6',
+        background_color: '#F8FAFC',
+        display: 'standalone',
         scope: '/',
         start_url: '/',
         icons: [
+          { src: '/favicon-192.png', sizes: '192x192', type: 'image/png' },
+          { src: '/favicon-512.png', sizes: '512x512', type: 'image/png' },
+          { src: '/favicon-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+        ],
+      },
+      devOptions: { enabled: true },
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
+        runtimeCaching: [
           {
-            src: 'favicon-192.png',
-            sizes: '192x192',
-            type: 'image/png',
+            urlPattern: ({ request }) => request.destination === 'document',
+            handler: 'NetworkFirst',
+            options: { cacheName: 'html-cache' },
           },
           {
-            src: 'favicon-512.png',
-            sizes: '512x512',
-            type: 'image/png',
-          },
-          {
-            src: 'favicon-512.png',
-            sizes: '512x512',
-            type: 'image/png',
-            purpose: 'maskable', // For adaptive icons on Android
+            urlPattern: ({ request }) => request.destination === 'image',
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'image-cache',
+              expiration: { maxEntries: 50 },
+            },
           },
         ],
       },
-      devOptions: {
-        enabled: true, // Enables PWA testing during development
-      },
-      workbox: {
-        globPatterns: ['**/*.{js,css,html,png,svg}'], // Cache all assets
-      },
+      injectRegister: 'auto',
     }),
   ],
-  base: './', // Ensures relative paths for PWA and Capacitor compatibility
+  base: '/', // Use absolute paths for Netlify
   build: {
-    outDir: 'dist', // Matches your Capacitor webDir
+    outDir: 'dist',
   },
 });
