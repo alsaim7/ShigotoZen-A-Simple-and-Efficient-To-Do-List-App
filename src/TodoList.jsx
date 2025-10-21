@@ -94,7 +94,7 @@ export default function TodoList() {
                 paddingBottom: '64px', // Space for reset button
             }}>
                 <DndContext
-                    sensors={sensors}
+                    // sensors={sensors}
                     collisionDetection={closestCenter}
                     onDragEnd={handleDragEnd}
                 >
