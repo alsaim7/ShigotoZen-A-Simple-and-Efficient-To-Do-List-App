@@ -44,13 +44,13 @@ export default function TodoList() {
     };
 
     const sensors = useSensors(
-        useSensor(PointerSensor),
         useSensor(TouchSensor, {
             activationConstraint: {
-                delay: 100,
-                tolerance: 5,
+                delay: 100, // Delay before drag starts
+                tolerance: 8, // Small movement before it's recognized as drag
             },
-        })
+        }),
+        useSensor(PointerSensor)
     );
 
     const handleDragEnd = (event) => {
@@ -94,9 +94,14 @@ export default function TodoList() {
                 paddingBottom: '64px', // Space for reset button
             }}>
                 <DndContext
-                    // sensors={sensors}
+                    sensors={sensors}
                     collisionDetection={closestCenter}
-                    onDragEnd={handleDragEnd}
+                    onDragStart={() => (document.body.style.overflow = 'hidden')}
+                    onDragCancel={() => (document.body.style.overflow = 'auto')}
+                    onDragEnd={(event) => {
+                        document.body.style.overflow = 'auto';
+                        handleDragEnd(event);
+                    }}
                 >
                     <SortableContext
                         items={todo.map((item) => item.id)}

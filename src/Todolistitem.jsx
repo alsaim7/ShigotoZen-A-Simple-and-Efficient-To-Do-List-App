@@ -15,7 +15,7 @@ export default function Todolistitem({ l, deleteTask, checkTask }) {
         transform: CSS.Transform.toString(transform),
         transition: transition || 'transform 0.2s ease',
         opacity: isDragging ? 0.6 : 1,
-        touchAction: 'manipulation',
+        touchAction: 'none', // ✅ this line is key
         boxShadow: isDragging ? '0 8px 24px rgba(0,0,0,0.2)' : '0 2px 8px rgba(0,0,0,0.1)',
         transformOrigin: 'center',
         '&:hover': {
