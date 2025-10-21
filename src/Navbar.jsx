@@ -49,16 +49,15 @@ export default function Navbar({ toDarkMode }) {
                     <IconButton
                         color="inherit"
                         onClick={toDarkMode}
-                        onTouchStart={() => setIsTouched(true)}
-                        onTouchEnd={() => setIsTouched(false)}
-                        onTouchCancel={() => setIsTouched(false)}
+                        onPointerDown={() => setIsTouched(true)}
+                        onPointerUp={() => setTimeout(() => setIsTouched(false), 150)}
+                        onBlur={() => setIsTouched(false)}
+                        onMouseLeave={() => setIsTouched(false)}
                         sx={{
                             transition: 'all 0.3s ease',
                             padding: '12px',
                             bgcolor: isTouched ? 'rgba(255,255,255,0.1)' : 'transparent',
-                            ...(isTouched && {
-                                transform: 'rotate(180deg)',
-                            }),
+                            transform: isTouched ? 'rotate(180deg)' : 'none',
                             '&:hover': {
                                 bgcolor: 'rgba(255,255,255,0.1)',
                                 transform: 'rotate(180deg)',

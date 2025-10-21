@@ -111,28 +111,24 @@ export default function TodoList() {
                         variant="outlined"
                         startIcon={<RestartAltIcon />}
                         onClick={resetTodos}
-                        onTouchStart={() => setIsTouched(true)}
-                        onTouchEnd={() => setIsTouched(false)}
-                        onTouchCancel={() => setIsTouched(false)}
+                        onPointerDown={() => setIsTouched(true)}
+                        onPointerUp={() => setTimeout(() => setIsTouched(false), 150)}
                         sx={{
                             borderRadius: '8px',
                             textTransform: 'none',
                             padding: '10px 16px',
                             borderColor: 'primary.main',
-                            color: 'primary.main',
+                            color: isTouched ? 'white' : 'primary.main',
                             bgcolor: isTouched ? 'primary.main' : 'transparent',
-                            ...(isTouched && {
-                                color: 'white',
-                                transform: 'scale(1.02)',
-                            }),
+                            transform: isTouched ? 'scale(1.02)' : 'none',
+                            transition: 'all 0.3s ease',
+                            mt: 2,
                             '&:hover': {
                                 borderColor: 'primary.dark',
                                 bgcolor: 'primary.main',
                                 color: 'white',
                                 transform: 'scale(1.02)',
                             },
-                            transition: 'all 0.3s ease',
-                            mt: 2,
                         }}
                     >
                         Reset All Tasks
