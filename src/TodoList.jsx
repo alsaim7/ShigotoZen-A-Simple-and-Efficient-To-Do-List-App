@@ -15,6 +15,7 @@ const initialData = () => {
 
 export default function TodoList() {
     const [todo, setTodo] = useState(initialData);
+    const [isTouched, setIsTouched] = useState(false);
 
     useEffect(() => {
         localStorage.setItem('todo', JSON.stringify(todo));
@@ -110,12 +111,20 @@ export default function TodoList() {
                         variant="outlined"
                         startIcon={<RestartAltIcon />}
                         onClick={resetTodos}
+                        onTouchStart={() => setIsTouched(true)}
+                        onTouchEnd={() => setIsTouched(false)}
+                        onTouchCancel={() => setIsTouched(false)}
                         sx={{
                             borderRadius: '8px',
                             textTransform: 'none',
                             padding: '10px 16px',
                             borderColor: 'primary.main',
                             color: 'primary.main',
+                            bgcolor: isTouched ? 'primary.main' : 'transparent',
+                            ...(isTouched && {
+                                color: 'white',
+                                transform: 'scale(1.02)',
+                            }),
                             '&:hover': {
                                 borderColor: 'primary.dark',
                                 bgcolor: 'primary.main',

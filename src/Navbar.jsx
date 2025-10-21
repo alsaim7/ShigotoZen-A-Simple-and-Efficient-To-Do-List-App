@@ -4,9 +4,12 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
-import logo from '../public/favicon.png'
+import { useState } from 'react';
+import logo from '../public/favicon.png';
 
 export default function Navbar({ toDarkMode }) {
+    const [isTouched, setIsTouched] = useState(false);
+
     return (
         <Box sx={{
             width: '100%',
@@ -46,14 +49,23 @@ export default function Navbar({ toDarkMode }) {
                     <IconButton
                         color="inherit"
                         onClick={toDarkMode}
+                        onTouchStart={() => setIsTouched(true)}
+                        onTouchEnd={() => setIsTouched(false)}
+                        onTouchCancel={() => setIsTouched(false)}
                         sx={{
                             transition: 'all 0.3s ease',
+                            padding: '12px',
+                            bgcolor: isTouched ? 'rgba(255,255,255,0.1)' : 'transparent',
+                            ...(isTouched && {
+                                transform: 'rotate(180deg)',
+                            }),
                             '&:hover': {
+                                bgcolor: 'rgba(255,255,255,0.1)',
                                 transform: 'rotate(180deg)',
                             },
                         }}
                     >
-                        <DarkModeIcon />
+                        <DarkModeIcon sx={{ fontSize: '1.5rem' }} />
                     </IconButton>
                 </Toolbar>
             </AppBar>
