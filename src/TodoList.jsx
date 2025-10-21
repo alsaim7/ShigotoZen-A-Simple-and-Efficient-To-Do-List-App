@@ -2,8 +2,9 @@ import { useState, useEffect } from "react";
 import { v4 as uuid } from 'uuid';
 import Todolistitem from "./Todolistitem";
 import TodolistForm from "./TodolistForm";
-import List from '@mui/material/List';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { DndContext, closestCenter, PointerSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 
@@ -36,11 +37,15 @@ export default function TodoList() {
         ));
     };
 
+    const resetTodos = () => {
+        setTodo((oldTodo) => oldTodo.map((l) => ({ ...l, completed: false })));
+    };
+
     const sensors = useSensors(
         useSensor(PointerSensor),
         useSensor(TouchSensor, {
             activationConstraint: {
-                delay: 100, // Brief delay to distinguish from scroll
+                delay: 100,
                 tolerance: 5,
             },
         })
@@ -61,17 +66,25 @@ export default function TodoList() {
     return (
         <Box sx={{
             display: 'flex',
-            justifyContent: 'center',
+            flexDirection: 'column',
+            alignItems: 'center',
             minHeight: 'calc(100vh - 64px)',
-            padding: { xs: '80px 16px 100px', md: '100px 24px 100px' },
-            touchAction: 'none', // Prevent browser scrolling during drag
+            padding: { xs: '80px 16px 100px', sm: '100px 24px 100px' },
+            touchAction: 'none',
         }}>
-            <List sx={{
+            <Box sx={{
                 width: '100%',
                 maxWidth: { xs: '100%', sm: 480, md: 600 },
-                bgcolor: 'background.paper',
-                borderRadius: '12px',
-                padding: '16px',
+                mb: 2,
+            }}>
+                <TodolistForm addTodo={addTodo} />
+            </Box>
+            <Box sx={{
+                width: '100%',
+                maxWidth: { xs: '100%', sm: 480, md: 600 },
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 2,
             }}>
                 <DndContext
                     sensors={sensors}
@@ -92,8 +105,31 @@ export default function TodoList() {
                         ))}
                     </SortableContext>
                 </DndContext>
-                <TodolistForm addTodo={addTodo} />
-            </List>
+                {todo.length > 0 && (
+                    <Button
+                        variant="outlined"
+                        startIcon={<RestartAltIcon />}
+                        onClick={resetTodos}
+                        sx={{
+                            borderRadius: '8px',
+                            textTransform: 'none',
+                            padding: '10px 16px',
+                            borderColor: 'primary.main',
+                            color: 'primary.main',
+                            '&:hover': {
+                                borderColor: 'primary.dark',
+                                bgcolor: 'primary.main',
+                                color: 'white',
+                                transform: 'scale(1.02)',
+                            },
+                            transition: 'all 0.3s ease',
+                            mt: 2,
+                        }}
+                    >
+                        Reset All Tasks
+                    </Button>
+                )}
+            </Box>
         </Box>
     );
 }
