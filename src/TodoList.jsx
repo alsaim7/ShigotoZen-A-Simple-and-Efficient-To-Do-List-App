@@ -43,19 +43,15 @@ export default function TodoList() {
         setIsTouched(false);
     };
 
+    // Mobile-friendly sensors
     const sensors = useSensors(
-        useSensor(TouchSensor, {
-            activationConstraint: {
-                delay: 100, // Delay before drag starts
-                tolerance: 8, // Small movement before it's recognized as drag
-            },
-        }),
+        useSensor(TouchSensor, { activationConstraint: { delay: 150, tolerance: 5 } }),
         useSensor(PointerSensor)
     );
 
     const handleDragEnd = (event) => {
         const { active, over } = event;
-
+        if (!over) return; // Prevent errors if drag is canceled
         if (active.id !== over.id) {
             setTodo((items) => {
                 const oldIndex = items.findIndex((item) => item.id === active.id);
@@ -71,8 +67,8 @@ export default function TodoList() {
             flexDirection: 'column',
             alignItems: 'center',
             minHeight: 'calc(100vh - 64px)',
-            padding: { xs: '80px 16px 16px', sm: '100px 24px 24px' }, // Reduced bottom padding
-            overflowY: 'auto', // Enable scrolling for entire page
+            padding: { xs: '80px 16px 16px', sm: '100px 24px 24px' },
+            overflowY: 'auto',
             width: '100%',
             boxSizing: 'border-box',
         }}>
@@ -83,6 +79,7 @@ export default function TodoList() {
             }}>
                 <TodolistForm addTodo={addTodo} />
             </Box>
+
             <Box sx={{
                 width: '100%',
                 maxWidth: { xs: '100%', sm: 480, md: 600 },
@@ -90,18 +87,14 @@ export default function TodoList() {
                 flexDirection: 'column',
                 gap: 2,
                 flexGrow: 1,
-                overflowY: 'auto', // Scroll for list container
-                paddingBottom: '64px', // Space for reset button
+                overflowY: 'auto',
+                paddingBottom: '64px',
+                touchAction: 'pan-y', // Allows vertical scrolling
             }}>
                 <DndContext
                     sensors={sensors}
                     collisionDetection={closestCenter}
-                    onDragStart={() => (document.body.style.overflow = 'hidden')}
-                    onDragCancel={() => (document.body.style.overflow = 'auto')}
-                    onDragEnd={(event) => {
-                        document.body.style.overflow = 'auto';
-                        handleDragEnd(event);
-                    }}
+                    onDragEnd={handleDragEnd}
                 >
                     <SortableContext
                         items={todo.map((item) => item.id)}
@@ -109,14 +102,15 @@ export default function TodoList() {
                     >
                         {todo.map((l) => (
                             <Todolistitem
-                                l={l}
                                 key={l.id}
+                                l={l}
                                 deleteTask={deleteTask}
                                 checkTask={checkTask}
                             />
                         ))}
                     </SortableContext>
                 </DndContext>
+
                 {todo.length > 0 && (
                     <Button
                         variant="outlined"
@@ -134,18 +128,7 @@ export default function TodoList() {
                             bgcolor: isTouched ? 'primary.main' : 'transparent',
                             transform: isTouched ? 'scale(1.02)' : 'none',
                             '@media (hover: hover)': {
-                                '&:hover': {
-                                    borderColor: 'primary.dark',
-                                    bgcolor: 'primary.main',
-                                    color: 'white',
-                                    // transform: 'scale(1.02)',
-                                },
-                            },
-                            '@media (hover: none)': {
-                                '&:hover': {
-                                    bgcolor: 'transparent',
-                                    transform: 'none',
-                                },
+                                '&:hover': { borderColor: 'primary.dark', bgcolor: 'primary.main', color: 'white' },
                             },
                             transition: 'all 0.3s ease',
                             mt: 2,
