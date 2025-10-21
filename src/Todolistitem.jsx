@@ -17,6 +17,7 @@ export default function Todolistitem({ l, deleteTask, checkTask }) {
     const style = {
         transform: CSS.Transform.toString(transform),
         transition,
+        touchAction: 'manipulation', // Optimize touch interactions
     };
 
     return (
@@ -86,6 +87,10 @@ export default function Todolistitem({ l, deleteTask, checkTask }) {
                         cursor: 'grab',
                         '&:active': {
                             cursor: 'grabbing',
+                        },
+                        padding: '12px', // Larger touch target
+                        '& svg': {
+                            fontSize: '1.5rem', // Larger drag handle
                         },
                     }}
                 >

@@ -4,7 +4,7 @@ import Todolistitem from "./Todolistitem";
 import TodolistForm from "./TodolistForm";
 import List from '@mui/material/List';
 import Box from '@mui/material/Box';
-import { DndContext, closestCenter } from '@dnd-kit/core';
+import { DndContext, closestCenter, PointerSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 
 const initialData = () => {
@@ -36,6 +36,16 @@ export default function TodoList() {
         ));
     };
 
+    const sensors = useSensors(
+        useSensor(PointerSensor),
+        useSensor(TouchSensor, {
+            activationConstraint: {
+                delay: 100, // Brief delay to distinguish from scroll
+                tolerance: 5,
+            },
+        })
+    );
+
     const handleDragEnd = (event) => {
         const { active, over } = event;
 
@@ -54,6 +64,7 @@ export default function TodoList() {
             justifyContent: 'center',
             minHeight: 'calc(100vh - 64px)',
             padding: { xs: '80px 16px 100px', md: '100px 24px 100px' },
+            touchAction: 'none', // Prevent browser scrolling during drag
         }}>
             <List sx={{
                 width: '100%',
@@ -62,8 +73,15 @@ export default function TodoList() {
                 borderRadius: '12px',
                 padding: '16px',
             }}>
-                <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-                    <SortableContext items={todo.map((item) => item.id)} strategy={verticalListSortingStrategy}>
+                <DndContext
+                    sensors={sensors}
+                    collisionDetection={closestCenter}
+                    onDragEnd={handleDragEnd}
+                >
+                    <SortableContext
+                        items={todo.map((item) => item.id)}
+                        strategy={verticalListSortingStrategy}
+                    >
                         {todo.map((l) => (
                             <Todolistitem
                                 l={l}
