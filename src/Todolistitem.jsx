@@ -5,12 +5,24 @@ import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import DragHandleIcon from '@mui/icons-material/DragHandle';
+import { CSS } from '@dnd-kit/utilities';
+import { useSortable } from '@dnd-kit/sortable';
 
 export default function Todolistitem({ l, deleteTask, checkTask }) {
     const labelId = `checkbox-list-label-${l.id}`;
 
+    const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: l.id });
+
+    const style = {
+        transform: CSS.Transform.toString(transform),
+        transition,
+    };
+
     return (
         <ListItem
+            ref={setNodeRef}
+            style={style}
             secondaryAction={
                 <IconButton
                     edge="end"
@@ -67,6 +79,18 @@ export default function Todolistitem({ l, deleteTask, checkTask }) {
                         transition: 'all 0.3s ease',
                     }}
                 />
+                <IconButton
+                    {...attributes}
+                    {...listeners}
+                    sx={{
+                        cursor: 'grab',
+                        '&:active': {
+                            cursor: 'grabbing',
+                        },
+                    }}
+                >
+                    <DragHandleIcon />
+                </IconButton>
             </ListItemButton>
         </ListItem>
     );

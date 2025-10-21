@@ -4,6 +4,8 @@ import Todolistitem from "./Todolistitem";
 import TodolistForm from "./TodolistForm";
 import List from '@mui/material/List';
 import Box from '@mui/material/Box';
+import { DndContext, closestCenter } from '@dnd-kit/core';
+import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 
 const initialData = () => {
     const data = JSON.parse(localStorage.getItem('todo'));
@@ -34,6 +36,18 @@ export default function TodoList() {
         ));
     };
 
+    const handleDragEnd = (event) => {
+        const { active, over } = event;
+
+        if (active.id !== over.id) {
+            setTodo((items) => {
+                const oldIndex = items.findIndex((item) => item.id === active.id);
+                const newIndex = items.findIndex((item) => item.id === over.id);
+                return arrayMove(items, oldIndex, newIndex);
+            });
+        }
+    };
+
     return (
         <Box sx={{
             display: 'flex',
@@ -48,14 +62,18 @@ export default function TodoList() {
                 borderRadius: '12px',
                 padding: '16px',
             }}>
-                {todo.map((l) => (
-                    <Todolistitem
-                        l={l}
-                        key={l.id}
-                        deleteTask={deleteTask}
-                        checkTask={checkTask}
-                    />
-                ))}
+                <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+                    <SortableContext items={todo.map((item) => item.id)} strategy={verticalListSortingStrategy}>
+                        {todo.map((l) => (
+                            <Todolistitem
+                                l={l}
+                                key={l.id}
+                                deleteTask={deleteTask}
+                                checkTask={checkTask}
+                            />
+                        ))}
+                    </SortableContext>
+                </DndContext>
                 <TodolistForm addTodo={addTodo} />
             </List>
         </Box>
