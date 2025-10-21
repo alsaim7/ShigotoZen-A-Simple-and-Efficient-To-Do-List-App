@@ -5,40 +5,58 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import { useState } from 'react';
-import logo from '../public/favicon.png';
+import logo from '/favicon.png'; // ✅ works in Vite/React
 
 export default function Navbar({ toDarkMode }) {
     const [isTouched, setIsTouched] = useState(false);
 
+    const handleTouchStart = () => setIsTouched(true);
+    const handleTouchEnd = () => {
+        setIsTouched(false);
+        toDarkMode(); // ✅ trigger dark mode after touch release
+    };
+
+    const handleClick = () => {
+        toDarkMode();
+        setIsTouched(false);
+    };
+
     return (
-        <Box sx={{
-            width: '100%',
-            position: 'fixed',
-            top: 0,
-            zIndex: 2000,
-            px: { xs: 1, sm: 2 },
-        }}>
+        <Box
+            sx={{
+                width: '100%',
+                position: 'fixed',
+                top: 0,
+                zIndex: 2000,
+                px: { xs: 1, sm: 2 },
+            }}
+        >
             <AppBar
                 position="static"
                 sx={{
                     maxWidth: '100%',
                     borderRadius: '0 0 12px 12px',
-                    boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
-                    backgroundImage: 'linear-gradient(to bottom, rgba(255,255,255,0.05), transparent)',
+                    boxShadow:
+                        '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
+                    backgroundImage:
+                        'linear-gradient(to bottom, rgba(255,255,255,0.05), transparent)',
                 }}
             >
-                <Toolbar sx={{
-                    justifyContent: 'space-between',
-                    py: 1,
-                    px: { xs: 2, sm: 3 },
-                }}>
+                <Toolbar
+                    sx={{
+                        justifyContent: 'space-between',
+                        py: 1,
+                        px: { xs: 2, sm: 3 },
+                    }}
+                >
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                         <img src={logo} alt="ShigotoZen" style={{ height: '32px' }} />
                         <Typography
                             variant="h6"
                             noWrap
                             sx={{
-                                fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
+                                fontFamily:
+                                    '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
                                 fontWeight: 700,
                                 letterSpacing: '.1rem',
                             }}
@@ -46,34 +64,24 @@ export default function Navbar({ toDarkMode }) {
                             ShigotoZen
                         </Typography>
                     </Box>
+
                     <IconButton
                         color="inherit"
-                        onClick={(e) => {
-                            e.currentTarget.blur(); // removes focus
-                            toDarkMode();
-                        }}
-                        onPointerDown={(e) => {
-                            setIsTouched(true);
-                        }}
-                        onPointerUp={(e) => {
-                            setTimeout(() => setIsTouched(false), 150);
-                            e.currentTarget.blur(); // ensure no hover/focus gets stuck
-                        }}
-                        onPointerLeave={() => setIsTouched(false)}
+                        onClick={handleClick}
+                        onTouchStart={handleTouchStart}
+                        onTouchEnd={handleTouchEnd}
+                        onTouchCancel={() => setIsTouched(false)}
                         sx={{
                             transition: 'all 0.3s ease',
                             padding: '12px',
-                            bgcolor: isTouched ? 'rgba(255,255,255,0.1)' : 'transparent',
+                            bgcolor: isTouched
+                                ? 'rgba(255,255,255,0.1)'
+                                : 'transparent',
                             transform: isTouched ? 'rotate(180deg)' : 'none',
-                            '&:hover': {
-                                bgcolor: 'rgba(255,255,255,0.1)',
-                                transform: 'rotate(180deg)',
-                            },
-                            // 👇 Prevents hover from sticking on touch screens
-                            '@media (hover: none)': {
+                            '@media (hover: hover)': {
                                 '&:hover': {
-                                    bgcolor: 'transparent',
-                                    transform: 'none',
+                                    bgcolor: 'rgba(255,255,255,0.1)',
+                                    transform: 'rotate(180deg)',
                                 },
                             },
                         }}

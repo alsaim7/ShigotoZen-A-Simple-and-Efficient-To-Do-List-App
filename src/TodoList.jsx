@@ -110,41 +110,37 @@ export default function TodoList() {
                     <Button
                         variant="outlined"
                         startIcon={<RestartAltIcon />}
-                        onClick={(e) => {
-                            e.currentTarget.blur(); // Remove focus immediately
+                        onClick={() => {
                             resetTodos();
+                            setIsTouched(false); // Reset touch state on click
                         }}
-                        onPointerDown={() => setIsTouched(true)}
-                        onPointerUp={(e) => {
-                            setTimeout(() => setIsTouched(false), 150);
-                            e.currentTarget.blur(); // Prevent stuck hover/focus on touch
-                        }}
-                        onPointerLeave={() => setIsTouched(false)}
-                        disableRipple
-                        disableFocusRipple
+                        onTouchStart={() => setIsTouched(true)}
+                        onTouchEnd={() => setIsTouched(false)}
+                        onTouchCancel={() => setIsTouched(false)}
                         sx={{
                             borderRadius: '8px',
                             textTransform: 'none',
                             padding: '10px 16px',
                             borderColor: 'primary.main',
-                            color: isTouched ? 'white' : 'primary.main',
+                            color: 'primary.main',
                             bgcolor: isTouched ? 'primary.main' : 'transparent',
                             transform: isTouched ? 'scale(1.02)' : 'none',
-                            transition: 'all 0.3s ease',
-                            mt: 2,
-                            '&:hover': {
-                                borderColor: 'primary.dark',
-                                bgcolor: 'primary.main',
-                                color: 'white',
-                                transform: 'scale(1.02)',
+                            '@media (hover: hover)': {
+                                '&:hover': {
+                                    borderColor: 'primary.dark',
+                                    bgcolor: 'primary.main',
+                                    color: 'white',
+                                    transform: 'scale(1.02)',
+                                },
                             },
-                            // 👇 This prevents hover from sticking on touchscreens
                             '@media (hover: none)': {
                                 '&:hover': {
                                     bgcolor: 'transparent',
                                     transform: 'none',
                                 },
                             },
+                            transition: 'all 0.3s ease',
+                            mt: 2,
                         }}
                     >
                         Reset All Tasks
