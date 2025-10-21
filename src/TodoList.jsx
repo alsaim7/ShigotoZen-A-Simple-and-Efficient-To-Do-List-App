@@ -40,6 +40,7 @@ export default function TodoList() {
 
     const resetTodos = () => {
         setTodo((oldTodo) => oldTodo.map((l) => ({ ...l, completed: false })));
+        setIsTouched(false);
     };
 
     const sensors = useSensors(
@@ -70,8 +71,10 @@ export default function TodoList() {
             flexDirection: 'column',
             alignItems: 'center',
             minHeight: 'calc(100vh - 64px)',
-            padding: { xs: '80px 16px 100px', sm: '100px 24px 100px' },
-            touchAction: 'none',
+            padding: { xs: '80px 16px 16px', sm: '100px 24px 24px' }, // Reduced bottom padding
+            overflowY: 'auto', // Enable scrolling for entire page
+            width: '100%',
+            boxSizing: 'border-box',
         }}>
             <Box sx={{
                 width: '100%',
@@ -86,6 +89,9 @@ export default function TodoList() {
                 display: 'flex',
                 flexDirection: 'column',
                 gap: 2,
+                flexGrow: 1,
+                overflowY: 'auto', // Scroll for list container
+                paddingBottom: '64px', // Space for reset button
             }}>
                 <DndContext
                     sensors={sensors}
@@ -110,10 +116,7 @@ export default function TodoList() {
                     <Button
                         variant="outlined"
                         startIcon={<RestartAltIcon />}
-                        onClick={() => {
-                            resetTodos();
-                            setIsTouched(false); // Reset touch state on click
-                        }}
+                        onClick={resetTodos}
                         onTouchStart={() => setIsTouched(true)}
                         onTouchEnd={() => setIsTouched(false)}
                         onTouchCancel={() => setIsTouched(false)}
@@ -130,7 +133,7 @@ export default function TodoList() {
                                     borderColor: 'primary.dark',
                                     bgcolor: 'primary.main',
                                     color: 'white',
-                                    transform: 'scale(1.02)',
+                                    // transform: 'scale(1.02)',
                                 },
                             },
                             '@media (hover: none)': {
