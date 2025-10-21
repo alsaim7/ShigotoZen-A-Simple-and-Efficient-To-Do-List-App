@@ -110,9 +110,18 @@ export default function TodoList() {
                     <Button
                         variant="outlined"
                         startIcon={<RestartAltIcon />}
-                        onClick={resetTodos}
+                        onClick={(e) => {
+                            e.currentTarget.blur(); // Remove focus immediately
+                            resetTodos();
+                        }}
                         onPointerDown={() => setIsTouched(true)}
-                        onPointerUp={() => setTimeout(() => setIsTouched(false), 150)}
+                        onPointerUp={(e) => {
+                            setTimeout(() => setIsTouched(false), 150);
+                            e.currentTarget.blur(); // Prevent stuck hover/focus on touch
+                        }}
+                        onPointerLeave={() => setIsTouched(false)}
+                        disableRipple
+                        disableFocusRipple
                         sx={{
                             borderRadius: '8px',
                             textTransform: 'none',
@@ -128,6 +137,13 @@ export default function TodoList() {
                                 bgcolor: 'primary.main',
                                 color: 'white',
                                 transform: 'scale(1.02)',
+                            },
+                            // 👇 This prevents hover from sticking on touchscreens
+                            '@media (hover: none)': {
+                                '&:hover': {
+                                    bgcolor: 'transparent',
+                                    transform: 'none',
+                                },
                             },
                         }}
                     >

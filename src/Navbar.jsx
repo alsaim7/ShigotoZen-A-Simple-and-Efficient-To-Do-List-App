@@ -48,11 +48,18 @@ export default function Navbar({ toDarkMode }) {
                     </Box>
                     <IconButton
                         color="inherit"
-                        onClick={toDarkMode}
-                        onPointerDown={() => setIsTouched(true)}
-                        onPointerUp={() => setTimeout(() => setIsTouched(false), 150)}
-                        onBlur={() => setIsTouched(false)}
-                        onMouseLeave={() => setIsTouched(false)}
+                        onClick={(e) => {
+                            e.currentTarget.blur(); // removes focus
+                            toDarkMode();
+                        }}
+                        onPointerDown={(e) => {
+                            setIsTouched(true);
+                        }}
+                        onPointerUp={(e) => {
+                            setTimeout(() => setIsTouched(false), 150);
+                            e.currentTarget.blur(); // ensure no hover/focus gets stuck
+                        }}
+                        onPointerLeave={() => setIsTouched(false)}
                         sx={{
                             transition: 'all 0.3s ease',
                             padding: '12px',
@@ -61,6 +68,13 @@ export default function Navbar({ toDarkMode }) {
                             '&:hover': {
                                 bgcolor: 'rgba(255,255,255,0.1)',
                                 transform: 'rotate(180deg)',
+                            },
+                            // 👇 Prevents hover from sticking on touch screens
+                            '@media (hover: none)': {
+                                '&:hover': {
+                                    bgcolor: 'transparent',
+                                    transform: 'none',
+                                },
                             },
                         }}
                     >
