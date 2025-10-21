@@ -7,6 +7,7 @@ import Button from '@mui/material/Button';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { DndContext, closestCenter, PointerSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 
 const initialData = () => {
     const data = JSON.parse(localStorage.getItem('todo'));
@@ -89,12 +90,14 @@ export default function TodoList() {
                 flexGrow: 1,
                 overflowY: 'auto',
                 paddingBottom: '64px',
+                overflowX: 'hidden',
                 touchAction: 'pan-y', // Allows vertical scrolling
             }}>
                 <DndContext
                     sensors={sensors}
                     collisionDetection={closestCenter}
                     onDragEnd={handleDragEnd}
+                    modifiers={[restrictToVerticalAxis]}
                 >
                     <SortableContext
                         items={todo.map((item) => item.id)}
