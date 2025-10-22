@@ -1,2 +1,3 @@
-# Serve .well-known files as-is
-/.well-known/*   /:splat   200!
+# Allow .well-known files to be served directly
+/.well-known/*  /:splat  200!
+/* /index.html  200
