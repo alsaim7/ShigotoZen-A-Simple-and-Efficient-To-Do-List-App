@@ -1,36 +1,36 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import { VitePWA } from 'vite-plugin-pwa'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
   plugins: [
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      filename: 'sw.js', // ✅ ensures service worker name matches your registration
-      includeAssets: [
-        'favicon.png',
-        'favicon.png',
-        'favicon.png',
-        'apple-touch-icon.png',
-        'robots.txt'
-      ],
-      manifest: false, // ✅ because you are using your own public/manifest.webmanifest
-      devOptions: {
-        enabled: false,
+      includeAssets: ['favicon.png', 'logo.png', 'favicon-192.png', 'favicon-512.png'],
+      manifest: {
+        name: 'ShigotoZen',
+        short_name: 'ShigotoZen',
+        description: 'A minimalist todo app for productivity and focus',
+        theme_color: '#3B82F6',
+        background_color: '#F8FAFC',
+        display: 'standalone',
+        scope: '/',
+        start_url: '/',
+        icons: [
+          { src: '/favicon.png', sizes: '192x192', type: 'image/png' },
+          { src: '/favicon.png', sizes: '512x512', type: 'image/png' },
+          { src: '/favicon.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+        ],
       },
+      devOptions: { enabled: false },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,png,svg,ico,woff2}'],
+        globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
         runtimeCaching: [
           {
             urlPattern: ({ request }) => request.destination === 'document',
             handler: 'NetworkFirst',
             options: { cacheName: 'html-cache' },
-          },
-          {
-            urlPattern: ({ request }) => request.destination === 'script' || request.destination === 'style',
-            handler: 'StaleWhileRevalidate',
-            options: { cacheName: 'asset-cache' },
           },
           {
             urlPattern: ({ request }) => request.destination === 'image',
@@ -42,11 +42,11 @@ export default defineConfig({
           },
         ],
       },
-      injectRegister: 'auto', // ✅ automatically injects registration script
+      injectRegister: 'auto',
     }),
   ],
   base: '/',
   build: {
     outDir: 'dist',
   },
-})
+});
