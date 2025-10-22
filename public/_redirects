@@ -1,1 +1,2 @@
-/.well-known/*  200
+# Serve .well-known files as-is
+/.well-known/*   /:splat   200!
